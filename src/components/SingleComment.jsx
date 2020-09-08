@@ -6,6 +6,7 @@ import FontAwesome from "react-fontawesome";
 import { StyledSingleComment } from "./mystyle/styledSIngleComment";
 import { StyledTextArea, Input } from "./mystyle/styledcomments";
 import { Button } from "./mystyle/watchlistButton";
+import { toast } from 'react-toastify';
 
 function SingleComment(props) {
   const [CommentValue, setCommentValue] = useState("");
@@ -37,7 +38,7 @@ function SingleComment(props) {
         setOpenReply(!OpenReply);
         props.refreshFunction(response.data.result);
       } else {
-        alert("Failed to save Comment");
+        toast.warn("Failed to save Comment");
       }
     });
   };

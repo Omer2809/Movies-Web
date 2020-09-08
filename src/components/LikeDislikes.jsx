@@ -28,8 +28,6 @@ function LikeDislikes(props) {
 
   useEffect(() => {
     http.post(`/like/getLikes`, variable).then((response) => {
-     
-
       if (response.data.success) {
         //How many likes does this video or comment have
         setLikes(response.data.likes.length);
@@ -41,7 +39,7 @@ function LikeDislikes(props) {
           }
         });
       } else {
-        alert("Failed to get likes");
+        toast.warn("Failed to get likes");
       }
     });
 
@@ -58,70 +56,112 @@ function LikeDislikes(props) {
           }
         });
       } else {
-        alert("Failed to get dislikes");
+        toast.warn("Failed to get dislikes");
       }
     });
   });
 
   const onLike = () => {
+    
     if (user === null) {
       return toast.info("Please Log in first");
     }
+
     if (LikeAction === null) {
+      // optimistic approach
+      const originalDislikeAction = DislikeAction;
+      setLikes(Likes + 1);
+      setLikeAction("liked");
+
+      //If dislike button is already clicked
+
+      if (DislikeAction !== null) {
+        setDislikeAction(null);
+        setDislikes(Dislikes - 1);
+      }
+
       http.post(`/like/upLike`, variable).then((response) => {
         if (response.data.success) {
-          setLikes(Likes + 1);
-          setLikeAction("liked");
+        } else {
+          // revertering th action
+          setLikes(Likes - 1);
+          setLikeAction(null);
 
           //If dislike button is already clicked
 
-          if (DislikeAction !== null) {
-            setDislikeAction(null);
-            setDislikes(Dislikes - 1);
+          if (originalDislikeAction !== null) {
+            setDislikeAction(originalDislikeAction);
+            setDislikes(Dislikes + 1);
           }
-        } else {
-          alert("Failed to increase the like");
+
+          toast.warn("Failed to increase the like");
         }
       });
+
     } else {
+      
+      setLikes(Likes - 1);
+      setLikeAction(null);
+      
       http.post(`/like/unLike`, variable).then((response) => {
         if (response.data.success) {
-          setLikes(Likes - 1);
-          setLikeAction(null);
+         
         } else {
-          alert("Failed to decrease the like");
+          setLikes(Likes + 1);
+          setLikeAction("liked");
+          toast.warn("Failed to decrease the like");
         }
       });
     }
   };
 
   const onDisLike = () => {
+    
     if (user === null) {
       return toast.info("Please Log in first");
     }
 
     if (DislikeAction !== null) {
+    
+      setDislikes(Dislikes - 1);
+      setDislikeAction(null);
+
       http.post(`/like/unDisLike`, variable).then((response) => {
         if (response.data.success) {
-          setDislikes(Dislikes - 1);
-          setDislikeAction(null);
         } else {
-          alert("Failed to decrease dislike");
-        }
-      });
-    } else {
-      http.post(`/like/upDisLike`, variable).then((response) => {
-        if (response.data.success) {
+    
           setDislikes(Dislikes + 1);
           setDislikeAction("disliked");
 
-          //If dislike button is already clicked
-          if (LikeAction !== null) {
-            setLikeAction(null);
-            setLikes(Likes - 1);
-          }
+          toast.warn("Failed to decrease dislike");
+        }
+      });
+    } else {
+  
+      const originalLikeAction = LikeAction;
+    
+      setDislikes(Dislikes + 1);
+      setDislikeAction("disliked");
+
+      //If dislike button is already clicked
+      if (LikeAction !== null) {
+        setLikeAction(null);
+        setLikes(Likes - 1);
+      }
+
+      http.post(`/like/upDisLike`, variable).then((response) => {
+        if (response.data.success) {
+  
         } else {
-          alert("Failed to increase dislike");
+          setDislikes(Dislikes - 1);
+          setDislikeAction(null);
+    
+          //If dislike button is already clicked
+          if (originalLikeAction !== null) {
+            setLikeAction(originalLikeAction);
+            setLikes(Likes + 1);
+          }
+          toast.warn("Failed to increase dislike");
         }
       });
     }

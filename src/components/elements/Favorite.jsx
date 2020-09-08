@@ -35,7 +35,7 @@ function Favorite(props) {
     userFrom = user._id;
   }
 
-  const [FavoriteNumber, setFavoriteNumber] = useState(0);
+  // const [FavoriteNumber, setFavoriteNumber] = useState(0);
   const [Favorited, setFavorited] = useState(false);
   const variables = {
     movieId: movieId,
@@ -53,48 +53,50 @@ function Favorite(props) {
     }
     if (Favorited) {
       //when we are already subscribed
+      setFavorited(!Favorited);
       http
         .post("/favorite/removeFromFavorite", variables)
         .then((response) => {
           if (response.data.success) {
-            setFavoriteNumber(FavoriteNumber - 1);
-            setFavorited(!Favorited);
+            // setFavoriteNumber(FavoriteNumber - 1);
           } else {
-            alert("Failed to Remove From Favorite");
+            setFavorited(!Favorited);
+            toast.warn("Failed to Remove From Favorite");
           }
         });
     } else {
       // when we are not subscribed yet
 
+      setFavorited(!Favorited);
       http
         .post("/favorite/addToFavorite", variables)
         .then((response) => {
           if (response.data.success) {
-            setFavoriteNumber(FavoriteNumber + 1);
-            setFavorited(!Favorited);
+            // setFavoriteNumber(FavoriteNumber + 1);
           } else {
-            alert("Failed to Add To Favorite");
+            setFavorited(!Favorited);
+            toast.warn("Failed to Add To Favorite");
           }
         });
     }
   };
 
   useEffect(() => {
-    http
-      .post("/favorite/favoriteNumber", variables)
-      .then((response) => {
-        if (response.data.success) {
-          setFavoriteNumber(response.data.subscribeNumber);
-        } else {
-          alert("Failed to get Favorite Number");
-        }
-      });
+    // http
+    //   .post("/favorite/favoriteNumber", variables)
+    //   .then((response) => {
+    //     if (response.data.success) {
+    //       setFavoriteNumber(response.data.subscribeNumber);
+    //     } else {
+    //       toast.warn("Failed to get Favorite Number");
+    //     }
+    //   });
 
     http.post("/favorite/favorited", variables).then((response) => {
       if (response.data.success) {
         setFavorited(response.data.subcribed);
       } else {
-        alert("Failed to get Favorite Information");
+        toast.warn("Failed to get Favorite Information");
       }
     });
   });

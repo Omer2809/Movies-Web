@@ -4,6 +4,7 @@ import Joi from "joi-browser";
 import Form from "./common/form";
 import auth from "../services/authService";
 import { Container, FormWrap } from "./mystyle/LoginFormStyling";
+import { toast } from 'react-toastify';
 
 
 class LoginForm extends Form {
@@ -19,6 +20,7 @@ class LoginForm extends Form {
 
   doSubmit = async () => {
     try {
+      toast.info("Authenticating user...");
       const { data } = this.state;
       await auth.login(data.username, data.password);
 

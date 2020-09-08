@@ -21,6 +21,7 @@ import { useHomeFetch } from "./hooks/useHomeFetch";
 
 import NoImage from "./images/no_image.jpg";
 import GoTop from "./mystyle/Styledgotopbtn";
+import { toast } from 'react-toastify';
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -52,7 +53,7 @@ const Home = () => {
     fetchMovies(endpoint);
   };
 
-  if (error) return <div>Something went wrong ...</div>;
+  if (error) return <div style={{ margin: "20px", color: "#444" }}>{toast.warn("Something Failed..")}OOPs Something went wrong ...</div>;
 
   if (!movies[0] && searchTerm === "") {
     return <Spinner />;

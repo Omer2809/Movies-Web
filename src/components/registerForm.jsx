@@ -15,7 +15,7 @@ class RegisterForm extends Form {
   schema = {
     username: Joi.string().required().email().label("Username"),
     password: Joi.string().required().min(5).label("Password"),
-    name: Joi.string().required().label("Name"),
+    name: Joi.string().required().min(5).label("Name"),
   };
 
   doSubmit = async () => {
@@ -28,6 +28,7 @@ class RegisterForm extends Form {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
         errors.username = ex.response.data;
+        toast.info(`${errors.username}`);
         this.setState({ errors });
       }
     }
