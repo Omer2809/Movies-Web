@@ -1,6 +1,6 @@
 ### MOVIES APPLICATION
 
-Developed this  [MOVIES](https://omer-movie.herokuapp.com/),which is an online database of information related to films ,television programs and streaming content online -including cast ,production crew ,plot summaries,rating , and critical reviews.
+Developed [MOVIES](https://omer-movie.herokuapp.com/),which is an online database of information related to films ,television programs and streaming content online -including cast ,production crew ,plot summaries,rating , and critical reviews.
 
 
 ### Features 
